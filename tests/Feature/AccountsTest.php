@@ -27,4 +27,50 @@ class AccountsTest extends TestCase
             //->assertExactJson(['data' => $data->toArray()]);
             ->assertJson(['data' => $data->toArray()]);
     }
+
+    public function testApiView()
+    {
+        $data = factory(Account::class)->create();
+
+        $response = $this->json('GET', '/api/accounts/' . $data->id);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson($data->toArray());
+    }
+
+    public function testApiInsert()
+    {
+        $data = factory(Account::class)->make();
+
+        $response = $this->json('POST', '/api/accounts', $data->toArray());
+
+        $response
+            ->assertStatus(200)
+            ->assertJson($data->toArray());
+    }
+
+    public function testApiUpdate()
+    {
+        $data = factory(Account::class)->create();
+
+        $toUpdate = ['title' => 'Conta do Elton'];
+
+        $response = $this->json('PUT', 'api/accounts/' . $data->id, $toUpdate);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson($toUpdate);
+    }
+
+    public function testApiDelete()
+    {
+        $data = factory(Account::class)->create();
+
+        $response = $this->json('DELETE', '/api/accounts/' . $data->id);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson($data->toArray());
+    }
 }
