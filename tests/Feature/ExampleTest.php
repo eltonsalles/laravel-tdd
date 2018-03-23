@@ -17,9 +17,20 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testBasicTest()
+    public function testHomeResponseStatus()
     {
         $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+
+    public function testAuthentication()
+    {
+        $user = factory(User::class)->create();
+
+        // Verifica se o usuário está autenticado
+        $response = $this->actingAs($user)
+            ->get('home');
 
         $response->assertStatus(200);
     }
